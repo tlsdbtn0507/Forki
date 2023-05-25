@@ -23,6 +23,8 @@ const getting = async function(){
   }
 };
 
+console.log('hi');
+
 getting();
 
 // https://forkify-api.herokuapp.com/v2
