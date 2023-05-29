@@ -11,6 +11,10 @@ class RecipeView {
         this.#parentView.insertAdjacentHTML('afterbegin',markup);
     }
 
+    addHandleRender(handler){
+      ['hashchange','load'].forEach(ev => window.addEventListener(ev,handler));
+    }
+
     renderSpinner(){
         const markup = 
             `<div class="spinner">
@@ -20,7 +24,7 @@ class RecipeView {
             </div>`;
         this.#parentView.innerHTML = '';
         this.#parentView.insertAdjacentHTML('afterbegin',markup);
-      }
+    }
 
     #clear(){
         this.#parentView.innerHTML = '';
