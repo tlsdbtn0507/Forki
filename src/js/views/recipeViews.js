@@ -1,11 +1,26 @@
 import View from './View'
 import icons from "url:../../img/icons.svg";
+import * as model from '../model'
 
 class RecipeView extends View {
     _parentView = document.querySelector('.recipe');
     _errorMsg = 'we could not get that recipe, Please use another one!'
     _msg = '';
     
+    addHandleUpdatingServings(handler){
+      this._parentView.addEventListener('click',function(e){
+        const btn = e.target.closest('.btn--tiny');
+        
+        if(!btn) return;
+
+        let serving = model.state.recipe.servings;
+
+        !btn.classList.value.includes('increase') ? serving-- : serving++;
+
+        if(!serving) return;
+        handler(serving);
+      })
+    }
 
     _generateIngredientMarkup(){
       return this._data.ingredients.map(ing=>{
@@ -51,7 +66,7 @@ class RecipeView extends View {
         <span class="recipe__info-text">servings</span>
 
         <div class="recipe__info-buttons">
-          <button class="btn--tiny btn--increase-servings">
+          <button class="btn--tiny btn--decrease-servings">
             <svg>
               <use href="${icons}#icon-minus-circle"></use>
             </svg>
