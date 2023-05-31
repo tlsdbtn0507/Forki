@@ -13,6 +13,25 @@ export default class View{
         this._parentView.insertAdjacentHTML('afterbegin',markup);
     }
 
+    update(data){
+
+        this._data = data;
+        const newMarkup = this._generateMarkup();
+        const newDom = document.createRange().createContextualFragment(newMarkup);
+
+        const newEl = Array.from(newDom.querySelectorAll('*'));
+        const curEle = Array.from(this._parentView.querySelectorAll('*'));
+
+        newEl.forEach((e,i)=>{
+            const curEl = curEle[i];
+            if(!e.isEqualNode(curEl) && e.firstChild?.nodeValue.trim() !== '')
+            curEl.textContent = e.textContent;
+
+            if(!e.isEqualNode(curEl)) Array.from(e.attributes)
+            .forEach(attr=>curEl.setAttribute(attr.name,attr.value));
+        })
+    }
+
     addHandleRender(handler){
       ['hashchange','load'].forEach(ev => window.addEventListener(ev,handler));
     }
