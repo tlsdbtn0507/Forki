@@ -4,6 +4,7 @@ import recipeViews from './views/recipeViews.js';
 import searchView from './views/searchView.js';
 import resultsView from './views/resultsView.js';
 import PageView from './views/PageView.js';
+import BookMarksView from './views/BookMarksView.js';
 
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
@@ -17,6 +18,7 @@ const controlRecipe = async function(){
     recipeViews.renderSpinner();
 
     resultsView.update(model.searchResultPage());
+    BookMarksView.update(model.state.bookMark)
 
     const id = window.location.hash.slice(1);
 
@@ -25,6 +27,7 @@ const controlRecipe = async function(){
     await model.loadRecipe(id);
 
     recipeViews.render(model.state.recipe);
+
   } catch (error) {
     recipeViews.renderError();
   }
@@ -55,13 +58,23 @@ const controlPagination = (goToPage)=>{
 const controlServings = function(e){
 
   model.updateServings(e);
-  // recipeViews.render(model.state.recipe);
   recipeViews.update(model.state.recipe);
+}
+
+const controlBookMark = function(){
+
+  if(!model.state.recipe.bookMarked) model.addBookMark(model.state.recipe);
+  else model.deleteBookMark(model.state.recipe.id);
+
+  recipeViews.update(model.state.recipe);
+
+  BookMarksView.render(model.state.bookMark);
 }
 
 const init = () => {
   recipeViews.addHandleRender(controlRecipe);
   recipeViews.addHandleUpdatingServings(controlServings);
+  recipeViews.addHandlerBookMark(controlBookMark);
   searchView.addHandlerSearch(controlSearch);
   PageView.addHandlerClick(controlPagination);
 };
