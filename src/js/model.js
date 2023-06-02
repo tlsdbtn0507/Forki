@@ -75,15 +75,30 @@ export const updateServings = function(newServings){
     state.recipe.servings = newServings;
 }
 
+const addBmToLocal = function(){
+    localStorage.setItem('bookmarks',JSON.stringify(state.bookMark))
+}
+
 export const addBookMark = function(recipe){
     state.bookMark.push(recipe);
 
     if(recipe.id === state.recipe.id) state.recipe.bookMarked = true;
+    addBmToLocal();
 }
 
 export const deleteBookMark = function(id){
     const index = state.bookMark.findIndex(el => el.id === id);
     
     state.bookMark.splice(index,1);
+
     if(id === state.recipe.id) state.recipe.bookMarked = false;
+    addBmToLocal();
 }
+
+const init = function(){
+    const storage = localStorage.getItem('bookmarks');
+
+    if(storage) state.bookMark = JSON.parse(storage); 
+}
+
+init();

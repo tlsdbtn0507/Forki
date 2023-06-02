@@ -7,6 +7,10 @@ class BookMarksView extends View{
     _errorMsg = 'No bookMarks yet, plz find a nice recipe and bookmark it'
     _msg = '';
 
+    addHandleRender(handler){
+        window.addEventListener('load',handler)
+    }
+
     _generateMarkup(){
         return this._data.map(bm=> PreviewView.render(bm,false)).join('');
     }
