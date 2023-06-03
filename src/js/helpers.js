@@ -9,14 +9,21 @@ const timeout = function (s) {
     });
 };
 
-export const getJSON = async function(url){
-    try {
-        const res = await Promise.race([fetch(url),timeout(TIMEOUT_SEC)]);
-        const { data, message} = await res.json();
+export const ajax = async function(url, sending = undefined){
+  const fetchPro = sending ? fetch(url,{
+    method:'POST',
+    headers:{
+      'Content-Type': 'application/json'
+    },
+    body:JSON.stringify(sending)
+  }) : fetch(url);
+  try {
+    const res = await Promise.race([fetchPro,timeout(TIMEOUT_SEC)]);
+    const { data, message} = await res.json();
     
-        if(!res.ok) throw new Error(`${message} (${res.status})`);
-        return data
-    } catch (error) {
-        throw error;
-    }
+    if(!res.ok) throw new Error(`${message} (${res.status})`);
+    return data
+  } catch (error) {
+    throw error;
+  }
 }
